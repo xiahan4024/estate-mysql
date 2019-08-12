@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta name="context-path" th:content="@{/}"/>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>注意事项</title>
+<link rel="shortcut icon" href="favicon.ico"> 
+<link href="${APP_PATH}/static/css/bootstrap.min.css?v=3.3.6" th:href="@{/static/css/bootstrap.min.css?v=3.3.6}" rel="stylesheet">
+<link href="${APP_PATH}/static/css/font-awesome.css?v=4.4.0" th:href="@{/static/css/font-awesome.css?v=4.4.0}" rel="stylesheet">
+<link href="${APP_PATH}/static/css/animate.css" th:href="@{/static/css/animate.css}" rel="stylesheet">
+<link href="${APP_PATH}/static/css/style.css?v=4.1.0" th:href="@{/static/css/style.css?v=4.1.0}" rel="stylesheet">
+</head>
+<body class="gray-bg">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="wrapper wrapper-content animated fadeInUp">
+
+                <div class="ibox-content m-b-sm border-bottom">
+                    <div class="text-center p-lg">
+                        <h2>注意事项</h2>
+                    </div>
+                </div>
+
+				<!-- 提示开始 -->
+                <div class="faq-item">
+                    <div class="row">
+                        <div class="col-md-7">
+                            <a data-toggle="collapse" href="faq.html#faq1" class="faq-question">新闻动态</a>
+                            <small><strong>admin</strong></small>
+                        </div>
+                        <div class="col-md-2 text-right">
+                            <span class="small font-bold">指数 </span>
+                            <br/>80
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div id="faq1" class="panel-collapse collapse faq-answer">
+                                <p>
+                                    1、点击标题即可查看该条新闻；
+                                    <br>2、点击操作栏即可完成操作(发布：即可发布新闻到微信公众号。取消：即可取消已经发布了的新闻)；
+                                    <br>3、发布状态与待审核状态颜色不同；
+                                    <br>4、可以输入关键字精确的查找。关键字会在新闻内容和标题高亮；
+                                    <br>5、可以在查看单条新闻点击下方的：查看原文 查看来源的该条新闻。
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="row">
+                        <div class="col-md-7">
+                            <a data-toggle="collapse" href="faq.html#faq2" class="faq-question">种子网站</a>
+                            <small><strong>admin</strong></small>
+                        </div>
+                        <div class="col-md-2 text-right">
+                            <span class="small font-bold">指数 </span>
+                            <br/>60
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div id="faq2" class="panel-collapse collapse faq-answer">
+                                <p>
+                                    1、可以指定爬取的网站；
+                                    <br>2、状态栏有小勾即为选中该种子网站；
+                                    <br>3、选中网站点击更新即可完成对爬取网站的指定。
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="row">
+                        <div class="col-md-7">
+                            <a data-toggle="collapse" href="faq.html#faq3" class="faq-question">种子网站2</a>
+                            <small><strong>admin</strong></small>
+                        </div>
+                        <div class="col-md-2 text-right">
+                            <span class="small font-bold">指数 </span>
+                            <br/>60
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div id="faq3" class="panel-collapse collapse faq-answer">
+                                <p>
+                                    1、编辑可对该网站进行一定的操作，除了爬取状态不建议去改其他参数；
+                                    <br>2、添加新网站请在开发人员指导下进行，参数详情请询问开发人员;
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="row">
+                        <div class="col-md-7">
+                            <a data-toggle="collapse" href="faq.html#faq4" class="faq-question">定时任务</a>
+                            <small><strong>admin</strong></small>
+                        </div>
+                        <div class="col-md-2 text-right">
+                            <span class="small font-bold">指数 </span>
+                            <br/>60
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div id="faq4" class="panel-collapse collapse faq-answer">
+                                <p>
+                                    1、下次运行时间 ：仅供参考，实际情况请参考运行周期进行推算；
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="row">
+                        <div class="col-md-7">
+                            <a data-toggle="collapse" href="faq.html#faq5" class="faq-question">其他事项</a>
+                            <small><strong>admin</strong></small>
+                        </div>
+                        <div class="col-md-2 text-right">
+                            <span class="small font-bold">指数 </span>
+                            <br/>50
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div id="faq5" class="panel-collapse collapse faq-answer">
+                                <p>
+                                    1、使用过程有问题请及时与我们联系；
+                                    <br>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 提示结束 -->
+          </div>
+		</div>
+	</div>
+	 <!-- 全局js -->
+    <script src="${APP_PATH}/static/js/jquery.min.js?v=2.1.4" th:src="@{/static/js/jquery.min.js?v=2.1.4}"></script>
+    <script src="${APP_PATH}/static/js/bootstrap.min.js?v=3.3.6" th:src="@{/static/js/bootstrap.min.js?v=3.3.6}"></script>
+
+    <!-- 自定义js -->
+    <script src="${APP_PATH}/static/js/content.js?v=1.0.0" th:src="@{/static/js/content.js?v=1.0.0}"></script>
+
+    <script>
+        $(document).ready(function () {
+
+            $('#loading-example-btn').click(function () {
+                btn = $(this);
+                simpleLoad(btn, true)
+
+                // Ajax example
+                //                $.ajax().always(function () {
+                //                    simpleLoad($(this), false)
+                //                });
+
+                simpleLoad(btn, false)
+            });
+        });
+
+        function simpleLoad(btn, state) {
+            if (state) {
+                btn.children().addClass('fa-spin');
+                btn.contents().last().replaceWith(" Loading");
+            } else {
+                setTimeout(function () {
+                    btn.children().removeClass('fa-spin');
+                    btn.contents().last().replaceWith(" Refresh");
+                }, 2000);
+            }
+        }
+    </script>
+</body>
+</html>

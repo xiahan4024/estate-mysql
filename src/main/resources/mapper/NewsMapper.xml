@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.swust.estate.mapper.NewsMapper">
+
+	<resultMap type="com.swust.estate.bean.EstateNews" id="mynews">
+		<id column="news_id" property="id"/>
+		<result column="news_title" property="title"/>
+		<result column="news_date" property="date"/>
+		<result column="news_a" property="a"/>
+		<result column="news_message" property="message"/>
+		<result column="news_source_id" property="sourceId"/>
+		<result column="url_source" property="source"/>
+		<result column="news_review_flag" property="flag"/>
+		<association property="url" resultMap="myurl"></association>
+	</resultMap>
+	
+	<resultMap type="com.swust.estate.bean.EstateUrl" id="myurl">
+		<id column="url_id" property="id"/>
+		<result column="url_url" property="url"/>
+		<result column="url_source" property="source"/>
+		<result column="url_flag" property="flag"/>
+		<result column="url_expreid" property="expreid"/>
+	</resultMap>
+
+
+	<!-- List<EstateNews> gotoPage(Integer pn, String text,Integer allFlag); -->
+	<select id="gotoPage" resultMap="mynews">
+		select news_id,news_title,news_date,news_review_flag , url_source from estate_news,estate_url 
+		where estate_news.news_source_id = estate_url.url_id
+		
+		<if test="arg2 != null and arg2 == 1">
+			and news_review_flag = 1
+		</if>
+		<if test="arg2 != null and arg2 == 0">
+			and news_review_flag = 0
+		</if>
+		
+		 and 
+		(news_title like CONCAT('%',#{arg1},'%') or news_message like CONCAT('%',#{arg1},'%') 
+		or url_source like CONCAT('%',#{arg1},'%')  ) 
+		order by news_date desc, url_source,news_title 
+	</select>
+	
+	<!-- List<EstateNews> gotoPageWithRelease(Integer pn, String text); -->
+	<select id="gotoPageWithRelease" resultMap="mynews">
+		select news_id,review_title news_title,review_date news_date ,news_review_flag , url_source
+		from estate_review,estate_url,estate_news where estate_news.news_source_id = estate_url.url_id
+		 and 
+		(review_title like CONCAT('%',#{arg1},'%') or review_message like CONCAT('%',#{arg1},'%') 
+		or url_source like CONCAT('%',#{arg1},'%')  ) 
+		order by review_date desc, url_source,review_title 
+	</select>
+	
+	<!-- List<String> getTitle(@Param("date")Date date); -->
+	<select id="getTitle" resultType="java.lang.String" parameterType="java.util.Date">
+		select news_title from estate_news where news_date &gt; #{date}
+		<!-- select news_title from estate_news -->
+	</select>
+	
+	<!-- void addNew(List<EstateNews> listNews); -->
+	<insert id="addNew" parameterType="com.swust.estate.bean.EstateNews">
+			insert into estate_news(news_title, news_date, news_a, news_message, news_source_id,news_review_flag) 
+			VALUES 
+			<foreach collection="list" item="item" separator=",">
+				( <![CDATA[#{item.title}]]>,#{item.date},#{item.a},#{item.message},#{item.sourceId}, 0 )
+			</foreach>
+	</insert>
+	
+	<!-- void deleSingle(int id);  -->
+	<delete id="deleSingle">
+		delete from estate_news where news_id = #{id}
+	</delete>
+	
+	<!-- void deleBatch(List<Integer> ids); -->
+	<delete id="deleBatch" parameterType="java.util.List">
+		delete from estate_news where news_id in 
+			<foreach collection="list" item="item" open="(" close=")" separator=",">
+				#{item}
+			</foreach>
+	</delete>
+	
+	
+	<!-- EstateNews getNewWithID(Integer id); -->
+	<select id="getNewWithID" resultType="com.swust.estate.bean.EstateNews">
+		select news_title title,news_date date,news_message message,news_a a from estate_news where news_id = #{id}
+	</select>
+	
+	<!-- void updateNewFlag(Integer newsid,Integer flag); -->
+	<update id="updateNewFlag">
+		UPDATE estate_news SET news_review_flag = #{flag} where news_id = #{newsid}
+	</update>
+	
+	<!-- Integer getNewsFlag(Integer id); -->
+	<select id="getNewsFlag" resultType="Integer">
+		SELECT count(news_id) FROM `estate_news` where news_id = #{id} and news_review_flag = 1
+	</select>
+	
+	<!-- EstateNews getReviewNewWithID(Integer id); -->
+	<select id="getReviewNewWithID" resultType="com.swust.estate.bean.EstateNews">
+		select review_title title,review_date date,review_message message,news_a a from estate_news,estate_review where  news_id =  review_news_id and review_news_id = #{id}
+	</select>
+</mapper>

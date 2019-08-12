@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8"/>
+<meta name="context-path" th:content="@{/}"/>
+<title>更新种子网站</title>
+<link rel="shortcut icon" href="favicon.ico"/> 
+<link href="${APP_PATH}/static/css/bootstrap.min.css?v=3.3.6" th:href="@{/static/css/bootstrap.min.css?v=3.3.6}" rel="stylesheet"></link>
+<link href="${APP_PATH}/static/css/plugins/sweetalert/sweetalert.css" th:href="@{/static/css/plugins/sweetalert/sweetalert.css}" rel="stylesheet"></link>
+<link href="${APP_PATH}/static/css/font-awesome.css?v=4.4.0" th:href="@{/static/css/font-awesome.css?v=4.4.0}" rel="stylesheet"></link>
+<link href="${APP_PATH}/static/css/plugins/iCheck/custom.css" th:href="@{/static/css/plugins/iCheck/custom.css}" rel="stylesheet"></link>
+<link href="${APP_PATH}/static/css/animate.css" th:href="@{/static/css/animate.css}" rel="stylesheet"></link>
+<link href="${APP_PATH}/static/css/style.css?v=4.1.0" th:href="@{/static/css/style.css?v=4.1.0}" rel="stylesheet"></link>
+<script type="text/javascript" src="${APP_PATH}/static/js/jquery-1.12.4.min.js" th:src="@{/static/js/jquery-1.12.4.min.js}"></script>
+<script src="${APP_PATH}/static/js/plugins/sweetalert/sweetalert.min.js" th:src="@{/static/js/plugins/sweetalert/sweetalert.min.js}"></script>
+</head>
+<body class ="gray-bg">
+		<div class="wrapper wrapper-content animated fadeInUp">
+	    <div class="row">
+	        <div class="col-md-10 col-md-offset-1">
+				<div class="ibox-content m-b-sm border-bottom">
+                    <div class="text-center p-lg">
+                        <h2>种子网站</h2>
+                    </div>
+                </div>
+		 <div class="ibox">
+		 <div class="ibox-title">
+	                    <div class="ibox-tools">
+	                        <div class="col-md-1 col-md-offset-2">
+				<button class="btn btn-primary" id="emp_add_modal_btn">更新</button>
+			</div>
+	                    </div>
+	                </div>
+		<div class="ibox-content">
+	                    <div class="project-list">
+				<table class="table table-hover" id="emps_table">
+					<thead>
+						<tr>
+							<th>#</th>
+							<th class="project-status"> 状态</th>
+							<th class="project-title"> 
+								来源
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-6" id="page_info_area"></div>
+			<div class="col-md-6" id="page_nav_area">
+			</div>
+		</div>
+		</div>
+		</div>
+		</div>
+	</div>
+	<script type="text/javascript">
+	var APP_PATH = $('meta[name=context-path]').attr("content");
+	//当前页码
+	var currentPage;
+	//总工页码
+	var totalRecord;
+	
+	//进入第一页
+	$(function(){
+		to_page(1);
+//		getData();
+	});
+	
+	//直接 获取所有的网站信息  不在分页，毕竟这个网站的信息并不是很多 对于性能而言并不会有多大的提升
+	function getData(){
+		$.ajax({
+			url:APP_PATH  + "seturl/getdata",
+			type:"GET",
+			success:function(result){
+				//1.解析显示新闻
+				build_news_table(result);
+				//2.解析显示分页信息
+				build_page_info(result);
+				//3.解析显示分页数据
+				build_page_nav(result);
+				//4.赋值
+				currentPage = result.result.List.pageNum;
+				totalRecord = result.result.List.total;
+			}
+		});
+	}
+	
+	//跳转到第几页
+	function to_page(pn){
+		$.ajax({
+			url:APP_PATH  + "seturl/gotoPage/"+ pn,
+			type:"GET",
+			success:function(result){
+				//1.解析显示新闻
+				build_news_table(result);
+				//2.解析显示分页信息
+				build_page_info(result);
+				//3.解析显示分页数据
+				build_page_nav(result);
+				//4.赋值
+				currentPage = result.result.List.pageNum;
+				totalRecord = result.result.List.total;
+			}
+		});
+		
+	}
+	
+	//1.解析显示新闻
+	function build_news_table(result) {
+		
+		$("#emps_table tbody").empty();
+		
+		var newsList = result.result.List.list;
+		$.each(newsList,function(idnex,item){
+			var checkBoxTd = $("<td> <input type='checkbox' class='check_item' urlid="+item.id +"></td>");
+			if(item.flag == 1){
+				$(checkBoxTd).find("input").first().attr("checked","checked");
+			}
+			var statusTd = $("<td class='project-status'> </td>").append($("<span> </span>")
+					.addClass( item.flag == 1 ? "label label-primary":"label label-default").append( item.flag == 1?  "爬取":"放弃"));
+			var titleTd = $("<td class='project-title'> <a target='_blank' href="+ item.url+"> "+ item.source+"</a> </td>")
+			$("<tr></tr>").append(checkBoxTd)
+				.append(statusTd)
+				.append(titleTd)
+				.appendTo("#emps_table tbody");	
+		});
+		
+	}
+	
+	//2.解析显示分页信息
+	function build_page_info(result){
+		$("#page_info_area").empty();
+		$("#page_info_area").append("当前 " +result.result.List.pageNum + " 页，总" +
+				result.result.List.pages+ " 页,总 "+ 
+				result.result.List.total+" 条记录");			
+	}
+	
+	//3.解析显示分页数据
+	function build_page_nav(result){
+		$("#page_nav_area").empty();
+		
+		var List = result.result.List;
+		
+		var ul = $("<ul></ul>").addClass("pagination");
+		//构建元素
+		var firstPageLi = $("<li></li>").append($("<a></a>").append("首页"));
+		var prePageLi = $("<li></li>").append($("<a></a>").append("&laquo;"));
+		
+		if(result.result.List.isFirstPage == true){
+			$(firstPageLi).hide();
+			$(prePageLi).hide();
+		}else{
+			firstPageLi.click(function name() {
+				to_page(1);
+			});
+			prePageLi.click(function name() {
+				
+				to_page(result.result.List.pageNum - 1);
+			});
+		}
+		
+		var nextPageLi = $("<li></li>").append($("<a></a>").append("&raquo;"));
+		var lastPageLi = $("<li></li>").append($("<a></a>").append("末页"));
+		
+		if(result.result.List.isLastPage == true){
+			$(nextPageLi).hide();
+			$(lastPageLi).hide();
+		}else{
+			nextPageLi.click(function() {
+				to_page(result.result.List.pageNum + 1);
+			});
+			lastPageLi.click(function() {
+				to_page(result.result.List.pages);
+			});
+		}
+		
+		ul.append(firstPageLi).append(prePageLi);
+		$.each(List.navigatepageNums,function(index,item){
+			 var itemLi = $("<li></li>").append($("<a></a>").append(item));
+			 if(List.pageNum == item){
+				 itemLi.addClass("active");
+			 }
+			 itemLi.click(function() {
+				to_page(item);
+			});
+			 ul.append(itemLi);
+		});
+		
+		ul.append(nextPageLi).append(lastPageLi);
+		
+		var navEle = $("<nav></nav>").append(ul);
+		navEle.appendTo("#page_nav_area");
+	}
+	
+	
+		/* =========== */
+		
+		//触发更新事件
+		$("#emp_add_modal_btn").click(function () {
+			var url = "";
+			$.each($("input:checked"),function(index,item){
+				
+				url+=$(item).attr("urlid")+"-"; 
+			});
+			if(url == ""){
+				swal({
+                    title: "提示",
+                    text: "种子网站不能为空！！！"
+                });
+				to_page(currentPage); 
+				return ;
+			} 
+			
+			//处理多余的 -
+			url = url.substring(0,url.length - 1)
+			console.log(url)
+		/* 	return ; */
+			
+			swal({
+                title: "您确定要更新这些信息吗",
+                text: "",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "更新",
+                closeOnConfirm: false
+            }, function () {
+                $.ajax({
+    				url:APP_PATH + "seturl/updateurl/"+ url,
+    				type:"PUT",
+    				success:function(msg){
+    					to_page(currentPage); 
+    				}
+    			});
+                swal("更新成功！", "种子网站已经更新成功", "success");
+            });
+		});
+		
+	</script>
+	
+	
+	
+</body>
+</html>

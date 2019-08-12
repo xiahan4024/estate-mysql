@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.swust.estate.mapper.ReviewMapper">
+	
+	<!-- void addreview(EstateReview estateReview); -->	
+	<insert id="addreview" parameterType="com.swust.estate.bean.EstateReview">
+		INSERT INTO estate_review(review_title,review_message,review_date,review_news_id) 
+		VALUE(#{title},#{message},#{date},#{newsid})
+	</insert>
+	
+	<!-- void deleteReviewWithID(Integer idInt); -->
+	<delete id="deleteReviewWithID">
+		delete from estate_review where review_news_id = #{idInt}
+	</delete>
+	
+	<!-- Integer getReviewIDBynewsId(Integer newsid); -->
+	<select id="getReviewIDBynewsId" resultType="java.lang.Integer">
+		select review_id from estate_review where review_news_id = #{newsid}
+	</select>
+	
+</mapper>

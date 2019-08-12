@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.swust.estate.mapper.UrlMapper">
+
+	<resultMap type="com.swust.estate.bean.EstateExpression" id="myExpre">
+		<id column="expre_id" property="id"/>
+		<result column="expre_title" property="title"/>
+		<result column="expre_date" property="date"/>
+		<result column="expre_content" property="content"/>
+		<result column="expre_href" property="href"/>
+		<result column="expre_encode" property="encode"/>
+		<result column="expre_img_a" property="imga"/>
+	</resultMap>
+	
+	<resultMap type="com.swust.estate.bean.EstateUrl" id="myURL">
+		<id column="url_id" property="id"/>
+		<result column="url_url" property="url"/>
+		<result column="url_source" property="source"/>
+		<result column="url_flag" property="flag"/>
+		<result column="url_expre_id" property="expreid"/>
+		<association property="expression" resultMap="myExpre" javaType="com.swust.estate.bean.EstateExpression" ></association>
+	</resultMap>
+	
+	<!-- List<EstateUrl> getFlagUrl(); -->
+	<select id="getFlagUrl" resultMap="myURL">
+		select * from estate_url,estate_expression where url_flag=1 and estate_url.url_expre_id = estate_expression.expre_id
+	</select>
+	
+	<!-- List<EstateUrl> getAllUrl(); -->
+	<select id="getAllUrl" resultMap="myURL">
+		select * from estate_url
+	</select>
+	
+	<!-- void initUrl(); -->
+	<update id="initUrl">
+		update estate_url set url_flag = 0
+	</update>
+	
+	<!-- void updateBatchUrl(List<Integer> ids); -->
+	<update id="updateBatchUrl" parameterType="java.util.List">
+		update estate_url set url_flag = 1 where url_id in
+			<foreach collection="list" item="item" separator="," open="(" close=")">
+				  #{item}
+			</foreach>
+	</update>
+	
+	<!-- void updateSingle(int id); -->
+	<update id="updateSingle">
+		update estate_url set url_flag = 1 where url_id = #{id}
+	</update>
+
+</mapper>

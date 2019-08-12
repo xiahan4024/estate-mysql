@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.swust.estate.mapper.JobMapper">
+
+	<select id="getJobThisTime" resultType="java.util.Date">
+		 select job_this_time from estate_job
+	</select>
+	
+	<!-- void updateJobThisTime(Date thisTimeDate);-->
+	<update id="updateJobThisTime">
+		update estate_job set job_this_time = #{thisTimeDate}
+	</update>
+
+	<!-- void updateJobNextTime(Date nextTimeDate);  -->
+	<update id="updateJobNextTime">
+		update estate_job set job_next_time = #{nextTimeDate}
+	</update>
+	
+	<!-- EstateJob getJob(); -->
+	<select id="getJob" resultType="com.swust.estate.bean.EstateJob">
+		select job_id id,job_name name,job_group jobgroup,job_status status,job_des des, job_object object, job_next_time nextTime,cron_id cronid,cron_expre cron,cron_des cronDes
+			from estate_job , estate_cron where cron_id = job_cron_id
+	</select>
+	
+	<!-- void updateJobCycle(Integer id); -->
+	<update id="updateJobCycle" >
+		update estate_job set job_cron_id = #{id}
+	</update>
+	
+	
+</mapper>

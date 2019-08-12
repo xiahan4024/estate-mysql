@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8"/>
+<meta name="context-path" th:content="@{/}"/>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>更新种子网站</title>
+<link rel="shortcut icon" href="favicon.ico"> 
+<link href="${APP_PATH}/static/css/bootstrap.min.css?v=3.3.6" th:href="@{/static/css/bootstrap.min.css?v=3.3.6}" rel="stylesheet">
+<link href="${APP_PATH}/static/css/plugins/sweetalert/sweetalert.css" th:href="@{/static/css/plugins/sweetalert/sweetalert.css}" rel="stylesheet">
+<link href="${APP_PATH}/static/css/font-awesome.css?v=4.4.0" th:href="@{/static/css/font-awesome.css?v=4.4.0}" rel="stylesheet">
+<link href="${APP_PATH}/static/css/plugins/iCheck/custom.css" th:href="@{/static/css/plugins/iCheck/custom.css}" rel="stylesheet">
+<link href="${APP_PATH}/static/css/animate.css" th:href="@{/static/css/animate.css}" rel="stylesheet">
+<link href="${APP_PATH}/static/css/style.css?v=4.1.0" th:href="@{/static/css/style.css?v=4.1.0}" rel="stylesheet">
+<script type="text/javascript" src="${APP_PATH}/static/js/jquery.min.js?v=2.1.4" th:src="@{/static/js/jquery.min.js?v=2.1.4}"></script>
+<script type="text/javascript" src="${APP_PATH}/static/js/bootstrap.min.js?v=3.3.6" th:src="@{/static/js/bootstrap.min.js?v=3.3.6}"></script>
+<script src="${APP_PATH}/static/js/plugins/sweetalert/sweetalert.min.js" th:src="@{/static/js/plugins/sweetalert/sweetalert.min.js}"></script>
+</head>
+<body gray-bg>
+	<div class="wrapper wrapper-content animated fadeInUp">
+	    <div class="row">
+	        <div class="col-md-10 col-md-offset-1">
+				<div class="ibox-content m-b-sm border-bottom">
+                    <div class="text-center p-lg">
+                        <h2>种子网站</h2>
+                    </div>
+                </div>
+	            <div class="ibox">
+	                <div class="ibox-title">
+	                    <div class="ibox-tools">
+	                        <button type="button" id="newurl" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#myModal4">
+                                	增加新网址
+                            </button>
+	                    </div>
+	                </div>
+	                <div class="ibox-content">
+	                    <div class="project-list">
+	
+	                        <table class="table table-hover" id= "emps_table">
+	                         <thead>
+						<tr>
+							<th class="project-status"> 状态</th>
+							<th class="project-title">
+								<a>来源</a> 
+							</th>
+							<th class="project-actions">操作</th>
+						</tr>
+					</thead>
+	                            <tbody></tbody>
+	                            </table>
+	                        </div>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	    
+	    
+	    
+   <div class="modal inmodal" id="myModal4" tabindex="-1" role="dialog"  aria-hidden="true">
+          <div class="modal-dialog">
+              <div class="modal-content animated fadeIn">
+                  <div class="modal-header">
+                      <h4 class="modal-title"></h4>
+                  </div>
+                  <div class="modal-body" >
+                  	<form class="form-horizontal" id="form">
+                  	<input editID ="" name="id" value="" type="hidden"/>
+                  	<input name="expreid" value="" type="hidden"/>
+                  	<input name="expression.id" value="" type="hidden"/>
+                  	<li class="divider">网址</li>
+                          <div class="form-group">
+                              <label class="col-sm-3 control-label">来源：</label>
+                              <div class="col-sm-8">
+                                  <input type="text" name="source" placeholder="来源" value="" class="form-control"> 
+                              </div>
+                          </div>
+                          <div class="form-group">
+                              <label class="col-sm-3 control-label">URL：</label>
+                              <div class="col-sm-8">
+                                  <input type="text" name="url" placeholder="URL" class="form-control"> 
+                              </div>
+                              </div>
+                          <div class="form-group">
+                              <label class="col-sm-3 control-label">状态：</label>
+                              <div class="col-sm-8">
+                              	<select class="form-control" name="flagstr" >
+						         <option value="爬取" sel="1">爬取</option>
+						         <option value="放弃爬取" sel="0">放弃爬取</option>
+						     </select>
+                              </div>
+                          </div>
+                        
+                           <li class="divider">表达式</li>
+                          <div class="form-group">
+                              <label class="col-sm-3 control-label">标题：</label>
+                              <div class="col-sm-8">
+                                  <input type="email" name="expression.title" placeholder="标题表达式" class="form-control"> 
+                              </div>
+                          </div>
+                          <div class="form-group">
+                              <label class="col-sm-3 control-label">时间：</label>
+                              <div class="col-sm-8">
+                                  <input type="email" name="expression.date" placeholder="时间表达式" class="form-control"> 
+                              </div>
+                          </div>
+                          <div class="form-group">
+                              <label class="col-sm-3 control-label">正文：</label>
+                              <div class="col-sm-8">
+                                  <input type="email" name="expression.content" placeholder="正文表达式" class="form-control"> 
+                              </div>
+                          </div>
+                          <div class="form-group">
+                              <label class="col-sm-3 control-label">链接前缀：</label>
+                              <div class="col-sm-8">
+                                  <input type="email" name="expression.href" placeholder="链接前缀" class="form-control"> 
+                              </div>
+                          </div>
+                          <div class="form-group">
+                              <label class="col-sm-3 control-label">编码：</label>
+                              <div class="col-sm-8">
+                              	<select class="form-control" name="expression.encode" >
+						         <option value="GBK" sel="GBK">GBK</option>
+						         <option value="UTF-8" sel="UTF-8">UTF-8</option>
+						         <option value="gb2312" sel="gb2312">gb2312</option>
+						     </select>
+                              </div>
+                          </div>
+                          <div class="form-group">
+                              <label class="col-sm-3 control-label">图片处理方式：</label>
+                              <div class="col-sm-8">
+                              	<select class="form-control" name="expression.imga" >
+						         <option value="不处理" sel="0">不处理</option>
+						         <option value="绵阳不动产官网" sel="2">绵阳不动产官网</option>
+						         <option value="中华人名共和国自然资源部" sel="1">中华人名共和国自然资源部</option>
+						     </select>
+                              </div>
+                          </div>
+                      </form>
+                  </div>
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                  	<button class="btn btn-sm btn-info" type="button" id="change" hidden>编辑</button>
+                      <button type="button" class="btn btn-primary" id="update">更新</button>
+                  </div>
+              </div>
+          </div>
+      </div>
+
+	<!--  -->
+<script type="text/javascript">
+
+	var APP_PATH = $('meta[name=context-path]').attr("content");
+	//直接发送ajax请求得到表单
+	$(function(){
+		$.ajax({
+			url:APP_PATH + "/seturlpro/getdata",
+			type:"GET",
+			success:function(result){
+				$("#emps_table tbody").empty();
+				var newsList = result.result.list;
+				$.each(newsList,function(idnex,item){
+					var statusTd = $("<td class='project-status'> </td>").append($("<span> </span>")
+								.addClass( item.flag == 1 ? "label label-primary":"label label-default").append( item.flag == 1?  "爬取":"放弃"));
+	                var titleTd = $("<td class='project-title'> <a target='_blank' href="+ item.url+"> "+ item.source+"</a> </td>");
+	                
+	                var editTd = $("<button editID=" +item.id+ " type='button' data-toggle='modal' data-target='#myModal4' class='btn btn-white btn-sm'><i class='fa fa-pencil'></i> 编辑 </button>"); 
+	                var delTd = $("<button id='dele' editID=" +item.id+ " type='button'  class='btn btn-white btn-sm'><i class='fa fa-close'></i> 删除 </button>");
+	               	if("绵阳市国土资源局-工作动态" == item.source || "绵阳市国土资源局-热点" == item.source || "绵阳市国土资源局-行业动态" == item.source|| "四川省自然资源厅-要闻播报" == item.source || "中华人民共和国自然资源部-要闻播报" == item.source){
+	               		var actionTd =$("<td class='project-actions'></td>").append(editTd);
+	                }else{
+	                	var actionTd =$("<td class='project-actions'></td>").append(editTd).append(" ").append(delTd);
+	                } 
+	                
+		//			var actionTd = $("<td class='project-actions'><button editID=" +item.id+ " type='button' data-toggle='modal' data-target='#myModal4' class='btn btn-white btn-sm'><i class='fa fa-pencil'></i> 编辑 </button><button id='dele' editID=" +item.id+ " type='button'  class='btn btn-white btn-sm'><i class='fa fa-close'></i> 删除 </button></td>");
+					$("<tr></tr>").append(statusTd)
+								.append(titleTd)
+								.append(actionTd)
+						.appendTo("#emps_table tbody");	
+				});
+			}
+		});
+	})
+	
+	//每个网站的编辑按钮点击事件
+	$(document).on("click","button[editID]",function(){
+		$("h4").first().html("编辑");
+		$("input[editID]").attr("value",$(this).attr("editID"));
+		$("#update").hide();
+		$("#change").show();
+	//	$("option").removeAttr("selected");
+		var id = $(this).attr("editID");
+		$.ajax({
+			url:APP_PATH + "/seturlpro/editpage/" + id,
+			type:"GET",
+			async:false,
+			success:function(msg){
+				var MSG = msg.result.list;
+				$("input").attr("disabled","disabled");
+				$("select").attr("disabled","disabled");
+				$("input[name='source']").val(MSG.source);
+				$("input[name='url']").val(MSG.url);
+				$("input[name='flag']").val(MSG.flag);
+			//	$("option[sel="+MSG.flag +"]").attr("selected","selected");
+				$("select[name=flagstr]").val($("select[name=flagstr] option[sel="+MSG.flag +"]").val());
+				$("input[name='expression.title']").val(MSG.expression.title);
+				$("input[name='expression.date']").val(MSG.expression.date);
+				$("input[name='expression.content']").val(MSG.expression.content);
+				$("input[name='expression.href']").val(MSG.expression.href);
+				
+				$("input[name='expreid']").val(MSG.expreid);
+				$("input[name='expression.id']").val(MSG.expression.id);
+				
+		//		$("input[name='expression.encode']").val(MSG.expression.encode);
+		//		$("option[sel="+MSG.encode +"]").attr("selected","selected");
+				$("select[name='expression.encode']").val($(" select[name='expression.encode'] option[sel="+MSG.expression.encode +"]").val());
+		//		$("option[sel="+MSG.imga +"]").attr("selected","selected");
+				$("select[name='expression.imga']").val($("select[name='expression.imga'] option[sel="+MSG.expression.imga +"]").val());
+			}
+		})
+	})
+	
+	//删除按钮 点击
+	$(document).on("click","#dele",function(){
+//		console.log("delete");
+		var id = $(this).attr("editid");
+		swal({
+            title: "您确定要删除这个网站吗",
+            text: "",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "删除",
+            closeOnConfirm: false
+        }, function () {
+        	$.ajax({
+    			url:APP_PATH + "/seturlpro/delete/" + id,
+    			type:"DELETE",
+    			success:function(msg){
+    				 swal("删除成功！", "种子网站已经更新成功", "success");
+    				setTimeout(function(){
+    	    			window.location.href = window.location.href + "?12";
+    				},800);
+    			}
+    		})
+        });
+	})
+	
+	//编辑 按钮点击
+	$("#change").click(function name() {
+		$("input").removeAttr("disabled");
+		$("select").removeAttr("disabled");
+		$("#update").show();
+		$("#change").hide();
+	})
+	
+	//添加新网址 点击
+	 $("#newurl").click(function() {
+		$("h4").first().html("添加新网址");
+		$("#change").hide();
+		$("#update").show();
+		$("input").val("");
+		$("input").removeAttr("disabled");
+		$("select").removeAttr("disabled");
+		//$("input[editID]").attr("editID"," ");
+		//$("input[editID]").attr("value",$(this).attr(" "));
+	})  
+	
+	//隐藏域  判断增加、修改
+	/* $(document).on("click","button[editID]",function(){
+		$("input[editID]").attr("value",$(this).attr("editID"));
+	}) */
+	
+	//更新事件  //$("#empAddModal form").serialize(),
+	$("#update").click(function() {
+		
+		swal({
+            title: "您确定要更新这些信息吗",
+            text: "",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "更新",
+            closeOnConfirm: false
+        }, function () {
+        	$.ajax({
+    			url:APP_PATH + "/seturlpro/update",
+    			data:$("#form").serialize(),
+    			type:"POST",
+    			success:function(msg){
+    				if(msg.code == 100){
+    					$("button[data-dismiss]").trigger("click");
+    				}else{
+    					swal("操作失败", "请检查数据正确性", "error");
+    				}
+    				
+    			}
+    		})
+    		swal({title: "更新成功",text: "种子网站已经更新成功",type: "success"});
+    		setTimeout(function(){
+    			window.location.href = window.location.href + "?12";
+			},800);
+        });
+	})
+	
+</script>
+
+
+
+</body>
+</html>

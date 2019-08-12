@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.swust.estate.mapper.CronMapper">
+
+	<!-- List<EstateCron> getAllCron(); -->
+	<select id="getAllCron" resultType="com.swust.estate.bean.EstateCron">
+		select cron_id id, cron_expre expre, cron_des des from estate_cron
+	</select>
+	
+	<!-- String getCronWithID(Integer id); -->
+	<select id="getCronWithID" resultType="java.lang.String">
+		select cron_expre from estate_cron where cron_id = #{id}
+	</select>
+	
+	
+</mapper>

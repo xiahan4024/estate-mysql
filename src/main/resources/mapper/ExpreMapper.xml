@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.swust.estate.mapper.ExpreMapper">
+
+	<!-- void addExpre(EstateUrl estateUrl); -->
+	<insert id="addExpre" parameterType="com.swust.estate.bean.EstateUrl"  useGeneratedKeys="true" keyProperty="expression.id">
+		insert into estate_expression(expre_title,expre_date,expre_content,expre_href, expre_encode, expre_img_a) 
+		values(#{expression.title}, #{expression.date},#{expression.content}, #{expression.href}, #{expression.encode},#{expression.imga})
+	</insert>
+	<!-- <insert id="addExpre" parameterType="com.swust.estate.bean.EstateExpression" useGeneratedKeys="true" keyProperty="id">
+		insert into estate_expression(expre_title,expre_date,expre_content,expre_href, expre_encode, expre_img_a) 
+		values(#{title}, #{date},#{content}, #{href}, #{encode},#{imga})
+	</insert> -->
+	
+	<!-- public void delExpre(Integer id); -->
+	<delete id="delExpre">
+		delete from estate_expression where expre_id = #{id}
+	</delete>
+
+	<!-- void updateExpre(EstateUrl estateUrl); -->
+	<update id="updateExpre" parameterType="com.swust.estate.bean.EstateUrl">
+		UPDATE estate_expression SET expre_title = #{expression.title},expre_date = #{expression.date},expre_content =#{expression.content},
+		expre_href = #{expression.href}, expre_encode = #{expression.encode}, expre_img_a = #{expression.imga}
+		where expre_id =#{expression.id}
+	</update>
+	
+	
+</mapper>

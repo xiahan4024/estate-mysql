@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta name="context-path" th:content="@{/}"/>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="shortcut icon" href="favicon.ico"> 
+<link href="${APP_PATH}/static/css/bootstrap.min.css?v=3.3.6" th:href="@{/static/css/bootstrap.min.css?v=3.3.6}" rel="stylesheet">
+<link href="${APP_PATH}/static/css/font-awesome.min.css?v=4.4.0" th:href="@{/static/css/font-awesome.min.css?v=4.4.0}" rel="stylesheet">
+<link href="${APP_PATH}/static/css/animate.css" th:href="@{/static/css/animate.css}" rel="stylesheet">
+<link href="${APP_PATH}/static/css/style.css?v=4.1.0" th:href="@{/static/css/style.css?v=4.1.0}" rel="stylesheet">
+<title>Insert title here</title>
+</head>
+
+<div id="wrapper">
+        <nav class="navbar-default navbar-static-side" role="navigation">
+            <div class="nav-close">
+            </div>
+            <div class="sidebar-collapse">
+                <ul class="nav" id="side-menu">
+                    <li class="nav-header">
+                        <div class="dropdown profile-element">
+                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                <span class="clear">
+                                    <span class="block m-t-xs" style="font-size:20px;">
+                                        <i class="fa fa-area-chart"></i>
+                                        <strong class="font-bold">新闻审核</strong>
+                                    </span>
+                                </span>
+                            </a>
+                        </div>
+                        <div class="logo-element">新闻审核
+                        </div>
+                    </li>
+                    <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
+                        <span class="ng-scope">菜单</span>
+                    </li>
+                    <li>
+                        <a class="J_menuItem" target="mainFrame" href="${APP_PATH}/news/page" th:href="@{/news/index}">
+                            <i class="fa fa-home"></i>
+                            <span class="nav-label">新闻动态</span>
+                        </a>
+                    </li>
+                    
+					<li>
+						<a class="xiahan" href="#">
+							<i class="fa fa-toggle-down"></i>
+							<span class="nav-label">种子网站</span>
+							<span class="fa arrow"></span>
+						</a>
+						<ul class="nav nav-second-level" hidden>
+							<li>
+								<a class="J_menuItem" target="mainFrame" href="${APP_PATH}/set/getPage" th:href="@{/seturl/index}">种子网站</a>
+							</li>
+							<li>
+								<a class="J_menuItem" target="mainFrame" href="${APP_PATH}/set/getpage" th:href="@{/seturlpro/index}">种子网站Pro</a>
+							</li>
+							
+						</ul>
+					</li>
+                   <!--  <li>
+                        <a class="J_menuItem" target="mainFrame" href="${APP_PATH}/set/getPage" th:href="@{/seturl/index}">
+                            <i class="fa fa-toggle-down"></i>
+                            <span class="nav-label">种子网站</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="J_menuItem" target="mainFrame" href="${APP_PATH}/set/getpage" th:href="@{/seturlpro/index}">
+                            <i class="fa fa-toggle-down"></i>
+                            <span class="nav-label">种子网站Pro</span>
+                        </a>
+                    </li> -->
+                    
+                    
+                    
+                    <li>
+                        <a class="J_menuItem" target="mainFrame" href="${APP_PATH}/set/getjobpage" th:href="@{/setjob/index}">
+                            <i class="fa fa-plane"></i>
+                            <span class="nav-label">定时任务</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="J_menuItem" target="mainFrame" href="${APP_PATH}/tips" th:href="@{/tips}">
+                            <i class="fa fa-question-circle"></i>
+                            <span class="nav-label">注意事项</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div>
+            	<p style="height: 1048px"></p>
+            </div>
+        </nav>
+    </div>
+    <!-- 全局js -->
+    <script src="${APP_PATH}/static/js/jquery.min.js?v=2.1.4" th:src="@{/static/js/jquery.min.js?v=2.1.4}"></script>
+    <script src="${APP_PATH}/static/js/plugins/metisMenu/jquery.metisMenu.js" th:src="@{/static/js/plugins/metisMenu/jquery.metisMenu.js}"></script>
+    <script src="${APP_PATH}/static/js/plugins/slimscroll/jquery.slimscroll.min.js" th:src="@{/static/js/plugins/slimscroll/jquery.slimscroll.min.js}"></script>
+    <script src="${APP_PATH}/static/js/plugins/layer/layer.min.js" th:src="@{/static/js/plugins/layer/layer.min.js}"></script>
+    <script src="${APP_PATH}/static/js/plugins/pace/pace.min.js" th:src="@{/static/js/plugins/pace/pace.min.js}"></script>
+   	<script src="${APP_PATH}/static/js/bootstrap.min.js?v=3.3.6" th:src="@{/static/js/bootstrap.min.js?v=3.3.6}"></script>
+    <!--  <script src="${APP_PATH}/static/js/hAdmin.js?v=4.1.0" th:src="@{/static/js/hAdmin.js?v=4.1.0}"></script>
+ 	 -->
+ 	 <script>
+ 	$(document).ready(function () {
+ 		
+ 		/* $("a[class='xiahan']").parent().hover(function () {
+ 			console.log(123);
+        }, function () {
+        	$("a[class='xiahan']").parent().removeClass("active");
+ 			$("a[class='xiahan']").next().hide();
+        }) */
+        $("a").click(function(){
+ 			$("a").parent().removeClass("active");
+ 			$(this).parent().addClass("active");
+ 		});
+ 		$("a[class='xiahan']").click(function(){
+ 			$("a[class='xiahan']").parent().removeClass("active");
+ 			/* $("a[class='xiahan']").next().hide(); */
+ 			
+ 			$(this).parent().addClass("active");
+ 			$(this).next().toggle();
+ 		})
+ 		
+ 		
+ 	});
+ 	 </script>
+ 	 
+</html>

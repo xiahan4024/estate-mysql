@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.swust.estate.mapper.UrlProMapper">
+
+	<resultMap type="com.swust.estate.bean.EstateExpression" id="myExpre">
+		<id column="expre_id" property="id"/>
+		<result column="expre_title" property="title"/>
+		<result column="expre_date" property="date"/>
+		<result column="expre_content" property="content"/>
+		<result column="expre_href" property="href"/>
+		<result column="expre_encode" property="encode"/>
+		<result column="expre_img_a" property="imga"/>
+	</resultMap>
+	
+	<resultMap type="com.swust.estate.bean.EstateUrl" id="myURL">
+		<id column="url_id" property="id"/>
+		<result column="url_url" property="url"/>
+		<result column="url_source" property="source"/>
+		<result column="url_flag" property="flag"/>
+		<result column="url_expre_id" property="expreid"/>
+		<association property="expression" resultMap="myExpre" javaType="com.swust.estate.bean.EstateExpression" ></association>
+	</resultMap>
+	
+	<!-- List<EstateUrl> getAllUrl(); -->
+	<select id="getAllUrl" resultMap="myURL">
+		select * from estate_url
+	</select>
+	
+	<!-- EstateUrl getUrlWithID(Integer id); -->
+	<select id="getUrlWithID" resultMap="myURL">
+		select * from estate_url ,estate_expression where url_expre_id = expre_id and url_id =#{id}
+	</select>
+	
+	<!-- void deleteURLWithID(Integer id); -->
+	<delete id="deleteURLWithID">
+		delete from estate_url where url_id = #{id}
+	</delete>
+	
+	<!-- void addUrl(EstateUrl estateUrl); -->
+	<insert id="addUrl" parameterType="com.swust.estate.bean.EstateUrl" useGeneratedKeys="true" keyProperty="id">
+		insert into estate_url(url_url,url_source,url_flag,url_expre_id) values(#{url},#{source},#{flag},#{expreid})
+	</insert>
+	
+	<!-- void updateUrl(EstateUrl estateUrl); -->
+	<update id="updateUrl" parameterType="com.swust.estate.bean.EstateUrl">
+		UPDATE estate_url SET url_url =#{url} ,url_source =#{source} , url_flag =#{flag} , url_expre_id=#{expreid}
+		WHERE url_id = #{id}
+	</update>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+</mapper>

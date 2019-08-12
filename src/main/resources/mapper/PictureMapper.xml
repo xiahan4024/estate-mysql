@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.swust.estate.mapper.PictureMapper">
+
+	<!-- public void addPicture(@Param("name")String name,@Param("reviewId")Integer reviewId); -->
+	<select id="addPicture">
+		INSERT INTO estate_picture(pic_url,pic_review_id) VALUES(#{name},#{reviewId})
+	</select>
+	
+	<!-- public void deleteUrlByReviewId(Integer reviewId); -->
+	<select id="deleteUrlByReviewId" >
+		delete from estate_picture WHERE pic_review_id = #{reviewId}
+	</select>
+	
+	<!-- public List<String> getpictureUrlByReviewId(Integer reviewId); -->
+	<select id="getpictureUrlByReviewId" resultType="java.lang.String">
+		select pic_url from estate_picture where pic_review_id = #{reviewId}
+	</select>
+	
+	<!-- public void updateID(Integer newsID, Integer reviewID); -->
+	<update id="updateID">
+		UPDATE estate_picture SET pic_review_id = #{reviewID} where pic_review_id = #{newsID}
+	</update>
+	
+</mapper>

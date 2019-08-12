@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+	
+	<context:component-scan base-package="com.swust">
+		<context:exclude-filter type="annotation"
+			expression="org.springframework.stereotype.Controller" />
+	</context:component-scan>	
+	<!-- =========================================== -->
+		<!-- <context:property-placeholder location="classpath:dbconfig.properties" /> -->
+	<!--创建httpclient的连接池 -->
+	<bean id="httpClientConnectionManager"
+		class="org.apache.http.impl.conn.PoolingHttpClientConnectionManager"
+		destroy-method="shutdown">
+		<!-- 设置最大连接数 -->
+		<property name="maxTotal" value="200" />
+		<!-- 设置每个主机的并发数 -->
+		<property name="defaultMaxPerRoute" value="20" />
+	</bean>
+	
+	
+		<!-- 
+	        Spring整合Quartz进行配置遵循下面的步骤：
+	        1：定义工作任务的Job
+	        2：定义触发器Trigger，并将触发器与工作任务绑定
+	        3：定义调度器，并将Trigger注册到Scheduler
+	     -->
+		
+		<bean id="jobFactory" class="com.swust.estate.utils.MyJobFactory"></bean>
+		
+	    <!-- 3.定义调度器，并将Trigger注册到调度器中 -->
+	    <bean id="scheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+	        <!-- <property name="autoStartup" value="true" /> -->
+	       <property name="jobFactory" ref="jobFactory"></property>
+	    </bean>
+	    
+	 	
+	    <!-- mannager 任务 -->
+	    <bean id="estateQuartzManager" class="com.swust.estate.utils.EstateQuartzManager" lazy-init="false" init-method="startJobs">
+	    	<property name="scheduler" ref="scheduler"></property>
+	    </bean>
+	    
+	    <!-- 初始化任务 -->
+	    <bean id="initEstateQuartz" class="com.swust.estate.utils.InitEstateQuartz" init-method="init"></bean>
+	    
+	<!-- =========================================== -->
+	
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">  
+      <property name="locations">  
+         <list>  
+            <!-- 这里支持多种寻址方式：classpath和file -->  
+            <value>classpath:config/dbconfig.properties</value> 
+            <value>classpath:config/picturehost.properties</value> 
+         </list>  
+      </property>  
+   </bean>   
+	
+
+	<!-- Spring的配置文件，这里主要配置和业务逻辑有关的 -->
+	<!--=================== 数据源，事务控制，xxx ================-->
+	<!-- <context:property-placeholder location="classpath:config/dbconfig.properties" /> -->
+	<bean id="pooledDataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"> 
+		<property name="driverClass" value="${jdbc.driverClass}"></property>
+		<property name="jdbcUrl" value="${jdbc.jdbcUrl}"></property>
+		<property name="user" value="${jdbc.user}"></property>
+		<property name="password" value="${jdbc.password}"></property>
+		<property name="minPoolSize" value="${jdbc.miniPoolSize}" />
+		<property name="maxPoolSize" value="${jdbc.maxPoolSize}"/>  
+		<property name="initialPoolSize" value="${jdbc.initialPoolSize}"/>
+		<property name="maxIdleTime" value="${jdbc.maxIdleTime}"/>
+		<property name="acquireIncrement" value="${jdbc.acquireIncrement}"/>
+		
+		<property name="acquireRetryAttempts" value="${jdbc.acquireRetryAttempts}"/>
+		<property name="acquireRetryDelay" value="${jdbc.acquireRetryDelay}"/>
+		<property name="testConnectionOnCheckin" value="${jdbc.testConnectionOnCheckin}"/>
+		<property name="automaticTestTable" value="${jdbc.automaticTestTable}"/>
+		<property name="idleConnectionTestPeriod" value="${jdbc.idleConnectionTestPeriod}"/>
+		<property name="checkoutTimeout" value="${jdbc.checkoutTimeout}"/>
+	</bean>
+	
+	<!-- <bean id="pooledDataSource" class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName" value="${jdbc.driverClass}"></property>
+		<property name="url" value="${jdbc.jdbcUrl}"></property>
+		<property name="username" value="${jdbc.user}"></property>
+		<property name="password" value="${jdbc.password}"></property>
+	</bean> -->
+
+	<!--================== 配置和MyBatis的整合=============== -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<!-- 指定mybatis全局配置文件的位置 -->
+		<property name="configLocation" value="classpath:config/mybatis.xml"></property>
+		<property name="dataSource" ref="pooledDataSource"></property>
+		<!-- 指定mybatis，mapper文件的位置 -->
+		<property name="mapperLocations" value="classpath:mapper/*.xml"></property>
+	</bean>
+
+	<!-- 配置扫描器，将mybatis接口的实现加入到ioc容器中 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<!--扫描所有dao接口的实现，加入到ioc容器中 -->
+		<property name="basePackage" value="com.swust.estate.mapper"></property>
+	</bean>
+	
+	<!-- 配置一个可以执行批量的sqlSession -->
+	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory"></constructor-arg>
+		<constructor-arg name="executorType" value="BATCH"></constructor-arg>
+	</bean>
+	<!--=============================================  -->
+
+	<!-- ===============事务控制的配置 ================-->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<!--控制住数据源  -->
+		<property name="dataSource" ref="pooledDataSource"></property>
+	</bean>
+	<!--开启基于注解的事务，使用xml配置形式的事务（必要主要的都是使用配置式）  -->
+	<aop:config>
+		<!-- 切入点表达式 -->
+		<aop:pointcut expression="execution(* com.swust.estate.service..*(..))" id="txPoint"/>
+		<!-- 配置事务增强 -->
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="txPoint"/>
+	</aop:config>
+	
+	<!--配置事务增强，事务如何切入  -->
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<!-- 所有方法都是事务方法 -->
+			<tx:method name="*"/>
+			<!--以get开始的所有方法  -->
+			<tx:method name="get*" read-only="true"/>
+		</tx:attributes>
+	</tx:advice>
+	
+	<!-- Spring配置文件的核心点（数据源、与mybatis的整合，事务控制） -->
+	<bean id="newsUntil" class="com.swust.estate.utils.NewsUntil"></bean>
+</beans>
+
+
